@@ -68,7 +68,12 @@ def seed():
     messages = [
         "Thanks good sir. I'm feeling quite healthy!",
         'Thanks for the meal buddy.',
-        "Please stop feeding me. I'm getting huge!"
+        "Please stop feeding me. I'm getting huge!",
+	"I'm fucking done. Stop already.",
+	"You click that button one more time, I'll eat your mom.",
+	"Okay, I'm eating your mom. OM.",
+	"OM.",
+	"Your mom tastes like shit."
     ]
 
     for message in messages:
