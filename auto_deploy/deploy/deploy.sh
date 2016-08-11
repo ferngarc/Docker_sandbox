@@ -91,7 +91,7 @@ function docker_pull () {
   echo "Pulling Docker images..."
   for image in "${DOCKER_PULL_IMAGES[@]}"
   do
-      ssh -t "${SSH_USER}@${SERVER_IP}" bash -c "'docker pull ${image}"
+      ssh -t "${SSH_USER}@${SERVER_IP}" bash -c "'docker pull ${image}'"
   done
 }
 
