@@ -186,7 +186,7 @@ case "${1}" in
   shift
   ;;
   -l|--docker-pull)
-  docker-pull
+  docker_pull
   shift
   ;;
   -a|--all)
