@@ -89,12 +89,10 @@ sudo usermod -aG docker "${KEY_USER}"
 
 function docker_pull () {
   echo "Pulling Docker images..."
-  for image in "${DOCKER_PULL_IMAGES{@}}"
+  for image in "${DOCKER_PULL_IMAGES[@]}"
   do
       ssh -t "${SSH_USER}@${SERVER_IP}" bash -c "'docker pull ${image}"
   done
-
-
 }
 
 function provision_server () {
