@@ -1,19 +1,19 @@
 #!/usr/bin/env bash
 
-REPO_NAME="autod"
+REPO_NAME="mobydock"
 
-#Check out the newest version of the code.
+# Check out the newest version of the code.
 export GIT_WORK_TREE="/var/git/${REPO_NAME}"
 git checkout -f
 
-TAG="$(git log --pretty=format: '%h' -n 1)"
+TAG="$(git log --pretty=format:'%h' -n 1)"
 FULL_COMMIT_TAG="${REPO_NAME}:${TAG}"
 FULL_LATEST_TAG="${REPO_NAME}:latest"
 
-#Build the image with the proper commit tag.
+# Build the image with the proper commit tag.
 docker build -t "${FULL_LATEST_TAG}" "${GIT_WORK_TREE}"
 
-#Get the docker ID of the last built image.
+# Get the Docker ID of the last built image.
 DOCKER_ID="$(docker images -q ${REPO_NAME} | head -1)"
 
 # Tag a latest version based off a commit tag.
