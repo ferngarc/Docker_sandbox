@@ -95,6 +95,21 @@ function docker_pull () {
   done
 }
 
+function git_init () {
+   echo "Initialize git repo and hooks..."
+   scp "git/post-receive/autod" "${SSH_USER}@${SERVER_IP}:/tmp/autod"
+   ssh -t "${SSH_USER}@${SERVER_IP}" bash -c "'
+   sudo apt-get update && sudo apt-get install -y -q git
+   sudo rm -rf /var/git/autod.git /var/git/autod
+   sudo git --git-dir=/var/git/autod.git --bare init
+
+   sudo mv /tmp/autod /var/git/autod.git/hooks/post-receive
+   sudo chmod +x /var/git/autod.git/hooks/post-receive
+   sudo chown ${SSH_USER:${SSH_USER} -R /var/git/autod.git /var/git/autod
+   '"
+   echo "Done!"
+}
+
 function provision_server () {
   configure_sudo
   echo "---"
@@ -109,7 +124,7 @@ function provision_server () {
 
 function help_menu () {
 cat << EOF
-Usage: ${0} (-h | -S | -u | -k | -s | -d [docker_ver] | -l | -a [docker_ver])
+Usage: ${0} (-h | -S | -u | -k | -s | -d [docker_ver] | -g | -l | -a [docker_ver])
 
 ENVIRONMENT VARIABLES:
    SERVER_IP        IP address to work on, ie. staging or production
@@ -132,7 +147,9 @@ OPTIONS:
    -s|--ssh                  Configure secure SSH
    -d|--docker               Install Docker
    -a|--all                  Provision everything except preseeding
-   -l|--docker-pull          Pull neccessary docker images. 
+   -l|--docker-pull          Pull neccessary docker images.
+   -g|--git-init             Install and initialize git.
+   -a|--all                  Provision everything except preseeding. 
 
 EXAMPLES:
    Configure passwordless sudo:
@@ -155,6 +172,9 @@ EXAMPLES:
 
    Configure everything together:
         $ deploy -a
+
+    Init Git repo:
+        $ deploy -g 
 
    Configure everything together with a custom Docker version:
         $ deploy -a 1.8.1
@@ -187,6 +207,10 @@ case "${1}" in
   ;;
   -l|--docker-pull)
   docker_pull
+  shift
+  ;;
+  -g|--git-init)
+  git_init
   shift
   ;;
   -a|--all)
