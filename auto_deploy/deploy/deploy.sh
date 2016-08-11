@@ -107,7 +107,7 @@ sudo mv /tmp/autod /var/git/autod.git/hooks/post-receive
 sudo chmod +x /var/git/autod.git/hooks/post-receive
 sudo chown ${SSH_USER:${SSH_USER} -R /var/git/autod.git /var/git/autod
    '"
-   echo "Done!"
+   echo 'Done!'
 }
 
 function provision_server () {
@@ -224,8 +224,8 @@ case "${1}" in
   *)
   echo "${1} is not a valid flag, try running: ${0} --help"
   ;;
-esac
-shift
+  esac
+  shift
 done
 
 
