@@ -99,13 +99,13 @@ function git_init () {
    echo "Initialize git repo and hooks..."
    scp "git/post-receive/autod" "${SSH_USER}@${SERVER_IP}:/tmp/autod"
    ssh -t "${SSH_USER}@${SERVER_IP}" bash -c "'
-   sudo apt-get update && sudo apt-get install -y -q git
-   sudo rm -rf /var/git/autod.git /var/git/autod
-   sudo git --git-dir=/var/git/autod.git --bare init
+sudo apt-get update && sudo apt-get install -y -q git
+sudo rm -rf /var/git/autod.git /var/git/autod
+sudo git --git-dir=/var/git/autod.git --bare init
 
-   sudo mv /tmp/autod /var/git/autod.git/hooks/post-receive
-   sudo chmod +x /var/git/autod.git/hooks/post-receive
-   sudo chown ${SSH_USER:${SSH_USER} -R /var/git/autod.git /var/git/autod
+sudo mv /tmp/autod /var/git/autod.git/hooks/post-receive
+sudo chmod +x /var/git/autod.git/hooks/post-receive
+sudo chown ${SSH_USER:${SSH_USER} -R /var/git/autod.git /var/git/autod
    '"
    echo "Done!"
 }
@@ -227,3 +227,5 @@ case "${1}" in
 esac
 shift
 done
+
+

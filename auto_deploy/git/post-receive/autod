@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-REPO_NAME="Docker_sandbox"
+REPO_NAME="autod"
 
 #Check out the newest version of the code.
 export GIT_WORK_TREE="/var/git/${REPO_NAME}"
