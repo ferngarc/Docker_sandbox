@@ -1,0 +1,30 @@
+postgres:
+  image: postgres:9.4.5
+  environment:
+    POSTGRES_USER: stanley
+    POSTGRES_PASSWORD: iloveb33r
+  ports:
+    - '5432:5432'
+  volumes:
+    - ~/.docker-volumes/stanley/postgresql/data:/var/lib/postgresql/data
+
+redis:
+  image: redis:2.8.22
+  ports:
+    - '6379:6379'
+  volumes:
+    - ~/.docker-volumes/stanley/redis/data:/var/lib/redis/data
+
+stanley:
+  build: .
+   links:
+    - postgres
+    - redis
+  volumes:
+    - .:/stanley    
+  ports:
+    - '8000:8000'
+  env_file: 
+    - .stanley.env
+ 
+
