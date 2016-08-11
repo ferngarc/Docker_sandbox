@@ -7,6 +7,8 @@ KEY_USER="${KEY_USER:-$(whoami)}"
 DOCKER_VERSION="${DOCKER_VERSION:-1.8.3}"
 
 
+DOCKER_PULL_IMAGES=("postgres:9.4" "redis:2.8")
+
 function preseed_staging() {
 cat << EOF
 STAGING SERVER (DIRECT VIRTUAL MACHINE) DIRECTIONS:
@@ -85,6 +87,16 @@ sudo usermod -aG docker "${KEY_USER}"
   echo "done!"
 }
 
+function docker_pull () {
+  echo "Pulling Docker images..."
+  for image in "${DOCKER_PULL_IMAGES{@}}"
+  do
+      ssh -t "${SSH_USER}@${SERVER_IP}" bash -c "'docker pull ${image}"
+  done
+
+
+}
+
 function provision_server () {
   configure_sudo
   echo "---"
@@ -93,11 +105,13 @@ function provision_server () {
   configure_secure_ssh
   echo "---"
   install_docker ${1}
+  echo "---"
+  docker_pull
 }
 
 function help_menu () {
 cat << EOF
-Usage: ${0} (-h | -S | -u | -k | -s | -d [docker_ver] | -a [docker_ver])
+Usage: ${0} (-h | -S | -u | -k | -s | -d [docker_ver] | -l | -a [docker_ver])
 
 ENVIRONMENT VARIABLES:
    SERVER_IP        IP address to work on, ie. staging or production
@@ -120,6 +134,7 @@ OPTIONS:
    -s|--ssh                  Configure secure SSH
    -d|--docker               Install Docker
    -a|--all                  Provision everything except preseeding
+   -l|--docker-pull          Pull neccessary docker images. 
 
 EXAMPLES:
    Configure passwordless sudo:
@@ -136,6 +151,9 @@ EXAMPLES:
 
    Install custom Docker version:
         $ deploy -d 1.8.1
+
+   Pull neccessary docker images:
+        $ deploy -l 
 
    Configure everything together:
         $ deploy -a
@@ -167,6 +185,10 @@ case "${1}" in
   ;;
   -d|--docker)
   install_docker "${2:-${DOCKER_VERSION}}"
+  shift
+  ;;
+  -l|--docker-pull)
+  docker-pull
   shift
   ;;
   -a|--all)
